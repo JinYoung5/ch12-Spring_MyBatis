@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+.page-main{
+	width:800px;
+	margin:0 auto;/*중앙 정렬*/
+}
+.result-display{
+	width:400px;
+	height:200px;
+	margin:100px auto;/*상하 좌우*/
+	border:1px solid #000;/*테두리*/
+	display: flex;/*하위 요소를 수직으로 쌓을 수 있는 공간을 만듬*/
+  	align-items: center;/*세로 정렬*/
+  	justify-content: center;/*가로 정렬*/
+}
+.align-center{
+	text-align:center;
+}
+.align-right{
+	text-align:right;
+}
+/*목록*/
+table{
+	width:100%;
+	margin-top:5px;
+	border:1px solid #000;
+	border-collapse:collapse;
+}
+table td, table th{
+	border:1px solid #000;
+	padding:5px;
+}
+/*등록, 수정 폼*/
+form{
+	width:500px;
+	margin:0 auto;
+	border:1px solid #000;
+	padding:10px 10px 10px 30px;
+}
+ul{
+	list-style:none;
+}
+label{
+	width:100px;
+	float:left;/*태그를 왼쪽으로 정렬*/
+}
+.error-color{
+	color:red;
+}
+
+
+
+
+
+
+
+
+
+
+
+
