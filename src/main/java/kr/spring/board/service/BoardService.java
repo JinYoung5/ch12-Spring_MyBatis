@@ -10,7 +10,7 @@ public interface BoardService {
 	public int selectBoardCount();
 	public List<BoardVO> selectBoardList(Map<String,Integer> map);
 	public BoardVO selectBoard(int num);
-	public void updateboard(BoardVO board);
+	public void updateBoard(BoardVO board);
 	public void deleteBoard(int num);
 }
 

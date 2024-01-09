@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.spring.board.dao.BoardMapper">
-	<!-- BoardVO에 메서드명이 id가됨, 원칙적으로 parameterType은 풀네임( ex)kr.spring.board.vo.BoardVO)으로 명시해줘야됨 -->
-	<insert id="insertBoard" parameterType="boardVO">	<!-- 데이터를 받아서 처리 : parameterType -->
+
+	<!-- 어노테이션처리하기위해 주석처리
+	BoardVO에 메서드명이 id가됨, 원칙적으로 parameterType은 풀네임( ex)kr.spring.board.vo.BoardVO)으로 명시해줘야됨
+	<insert id="insertBoard" parameterType="boardVO">	데이터를 받아서 처리 : parameterType
 		INSERT INTO aboard(
 			num,
 			writer,
@@ -12,19 +14,22 @@
 			reg_date)
 		VALUES (
 		aboard_seq.nextval,
-		#{writer},					<!-- ~VALUES(aboard_seq.nextval, 뒤에 writer=? (물음표) 대신 #{}로 나열.. 나중에 자동으로 ?로 처리됨 -->
-		#{title},					<!-- el형식으로 $으로 표시하면(${title}) 오류가나지만 에러문구가 이상해서 찾기 힘듦 주의 -->
+		#{writer},					~VALUES(aboard_seq.nextval, 뒤에 writer=? (물음표) 대신 #{}로 나열.. 나중에 자동으로 ?로 처리됨
+		#{title},					el형식으로 $으로 표시하면(${title}) 오류가나지만 에러문구가 이상해서 찾기 힘듦 주의
 		#{passwd},
 		#{content},
 		SYSDATE
 		)
 	</insert>
+	-->
 	
-	<select id="selectBoardCount" resultType="integer">		<!-- 반환하는 데이터만 있음.. 원래는 java.lang.Integer로 명시, 알리아스(별칭)으로 integer로만 써도 됨 -->
-		SELECT												<!-- 한줄로 써도됨 SELECT COUNT(*) FORM aboard~ 구분하기 쉽게 줄바꾼것 -->
+	<!-- 어노테이션처리로 하기위해 주석처리, 어노테이션처리로 안하려면 그냥 사용해도됨 : sql문장이 길때 어노테이션처리로하면 코드가 길어짐
+	<select id="selectBoardCount" resultType="integer">		 반환하는 데이터만 있음.. 원래는 java.lang.Integer로 명시, 알리아스(별칭)으로 integer로만 써도 됨
+		SELECT												 한줄로 써도됨 SELECT COUNT(*) FORM aboard~ 구분하기 쉽게 줄바꾼것
 			COUNT(*)
 		FROM aboard
 	</select>
+	 -->
 	
 	<select id="selectBoardList" parameterType="map" resultType="boardVO">	<!-- parameterType="java.util.map" 으로 원래 명시.. 알리아스로 사용가능 // 반환타입을 resultType="list"로 하면 오류남. list가 아니고 레코드로 맵핑되는 객체로 명시(boardVO)-->
 		SELECT
@@ -40,12 +45,33 @@
 		WHERE rnum >= #{start} AND rnum <= #{end}		
 		]]>												<!-- xml문법을 건너 뛰게 하는 역활 CDATA섹션처리 -->
 	</select>
-	
+	<!-- 어노테이션으로 하기위해 주석처리 BoardMapper.java에서 어노테이션 작성해야함
 	<select id="selectBoard" parameterType="integer" resultType="boardVO">
 		SELECT
 			*
 		FROM aboard
-		WHERE num=#{num}								<!-- BoardMapper의 public BoardVO selectBoard(int num) 인자명 num을 사용-->
+		WHERE num=#{num}								BoardMapper의 public BoardVO selectBoard(int num) 인자명 num을 사용
 	</select>
+	 -->
+	
+	<!-- 어노테이션 처리하기위해 주석처리 
+	<update id="updateBoard" parameterType="boardVO">
+		UPDATE 
+			aboard
+		SET
+			writer=#{writer},
+			title=#{title},
+			content=#{content}
+		WHERE
+			num=#{num}
+	</update>
+	 --> 
+	
+	<!-- 어노테이션 처리하기위해 주석처리
+	<delete id="deleteBoard" parameterType="integer">	Mapper에 public void 면 resultType없음
+		DELETE FROM aboard
+		WHERE num=#{num}
+	</delete>
+	 -->
 	
 </mapper>

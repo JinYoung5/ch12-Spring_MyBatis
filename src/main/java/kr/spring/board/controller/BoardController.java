@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -96,4 +97,68 @@ public class BoardController {
 		return new ModelAndView("selectDetail","board",board);
 	}
 	
+	@GetMapping("/update.do")
+	public String formUpdate(@RequestParam int num, Model model) {
+		model.addAttribute("boardVO", boardService.selectBoard(num));
+		
+		
+		return "updateForm";
+	}
+	
+	@PostMapping("/update.do")
+	public String submitUpdate(@Valid BoardVO boardVO, BindingResult result) {
+		//유효성 체크  결과 오류가 있으면 폼을 호출
+		if(result.hasErrors()) {
+			return "updateForm";
+		}
+		
+		//DB에서 저장된 비밀번호 구하기
+		BoardVO db_board = boardService.selectBoard(boardVO.getNum());
+		//비밀번호 체크
+		if(!db_board.getPasswd().equals(boardVO.getPasswd())) {
+								//에러필드, 에러코드
+			result.rejectValue("passwd", "invalidPassword");
+			return "updateForm";
+			
+		}
+		
+		//글 수정
+		boardService.updateBoard(boardVO);
+		
+		return "redirect:/list.do";
+	}
+	
+	@GetMapping("/delete.do")
+	public String formDelete(@RequestParam int num, Model model) {
+		BoardVO boardVO = new BoardVO();
+		boardVO.setNum(num);
+		
+		model.addAttribute("boardVO",boardVO);
+		
+		return "deleteForm";
+	}
+	
+	@PostMapping("/delete.do")							//유효성체크하기위해 BindindResult
+	public String submitDelete(@Valid BoardVO boardVO, BindingResult result) {
+		//유효성 체크 결과 오류가 있으면 폼을 호출
+		//비밀번호만 전송 여부 체크
+		if(result.hasFieldErrors("passwd")) {
+			return "deleteForm";
+		}
+		
+		//DB에 저장된 비밀번호 구하기
+		BoardVO db_board = boardService.selectBoard(boardVO.getNum());
+		//비밀번호 일치 여부 체크(비밀번호가 불일치하면 진입 : !~)
+		if(!db_board.getPasswd().equals(boardVO.getPasswd())) {
+								//에러필드, 에러코드
+			result.rejectValue("passwd", "invalidPassword");
+			
+			return "deleteForm";
+		}
+		
+		//글 삭제
+		boardService.deleteBoard(boardVO.getNum());
+		
+		return "redirect:/list.do";
+	}
 }
